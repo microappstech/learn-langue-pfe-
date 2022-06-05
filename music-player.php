@@ -1,37 +1,37 @@
 <?php
 session_start();
+$usename = $_SESSION["username"];
+if (!isset($_SESSION["username"])) {
+  header("location:sign-in.php");
+}
 include './files/functions.php';
-$_SESSION["language"] = "";
-$lan = $_SESSION["language"];
-if ($_SESSION["category"] == "") {
+$conn = new mysqli("localhost", "root", "", "learn_lang");
+$querylangue = "SELECT * from users , langue where users.language_user = langue.name_lang and users.username='$usename';";
+$queryu = "SELECT * from users where username='$usename';";
+if (!isset($_SESSION["category"])) {
   $category = "at school";
 } else {
   $category = $_SESSION["category"];
 }
-$query = "SELECT * FROM `langue` WHERE`name_lang`= '$lan';";
-$conn = new mysqli("localhost", "root", "", "learn_lang");
-$result = $conn->query($query);
-if ($result->num_rows > 0) {
-  // output data of each row
-  $lang = $result->fetch_assoc();
-  echo "id: " . $lang["name_lang"] . " - Name: " . $lang["name_complet"] . " " . $lang["des"] . "<br>";
+if (isset($_SESSION['nameaudio'])) {
+  $nameaudio =  $_GET['nameaudio'];
 } else {
-  echo "0 results";
+  $nameaudio = "ARES001.mp3";
 }
 
-
+$result2 = $conn->query($querylangue);
+$lang = $result2->fetch_assoc();
 
 ?>
 <!doctype html>
 <html lang="en">
 
-<!-- Mirrored from templates.iqonic.design/LANG/html/music-player.php by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 21 May 2022 09:42:44 GMT -->
 
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>LANG- Responsive Bootstrap 4 Admin Dashboard Template</title>
+  <title>LANG- Player audio</title>
   <!-- Favicon -->
   <link rel="shortcut icon" href="images/favicon.ico" />
   <!-- Bootstrap CSS -->
@@ -55,7 +55,7 @@ if ($result->num_rows > 0) {
   <div class="wrapper">
     <!-- Sidebar  -->
 
-    <?php include './assets/nav.html' ?>
+    <?php include './assets/nav.php' ?>
     <!-- TOP Nav Bar END -->
 
     <!-- Page Content  -->
@@ -71,9 +71,6 @@ if ($result->num_rows > 0) {
                       <label>Category :</label>
                       <select name="category" class="form-control" id="selectuserrole">
                         <?php
-
-
-
                         $sqloption = "SELECT DISTINCT(audio_cate) from audio;";
                         $rescate = $conn->query($sqloption);
                         $cates = array();
@@ -115,11 +112,13 @@ if ($result->num_rows > 0) {
                   <div class="col-lg-8">
                     <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
                       <div class="music-detail">
-                        <h3><?php echo $lang["name_complet"] ?></h3>
+                        <h3><?php echo $lang["name_complet"];
+
+                            ?></h3>
                         <span><?php echo $lang["des"] ?></span>
 
                         <div class="d-flex align-items-center">
-                          <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2">Play</a>
+                          <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2 desabled">Play</a>
                         </div>
                       </div>
                       <div class="music-right">
@@ -141,28 +140,32 @@ if ($result->num_rows > 0) {
         <div class="col-lg-12">
           <div class="iq-card">
             <div class="iq-card-body">
-              <ul class="list-unstyled iq-music-slide mb-0">
-                <?php
-                $language = $lang["name_lang"];
-                //$sql = "SELECT * FROM `audio` Where audio_cate like '$category' and ;";
-                $sql = "SELECT * FROM `audio` Where audio_cate like '$category' and `audio_lang` ='$language';";
-                $result2 = $conn->query($sql);
+              <?php
+              $language = $lang["name_lang"];
+              //$sql = "SELECT * FROM `audio` Where audio_cate like '$category' and ;";
+              $sql = "SELECT * FROM `audio` Where audio_cate like '$category' and `audio_lang`='$language';";
+              $result3 = $conn->query($sql);
 
 
-                $songs = array();
-                while ($data = $result2->fetch_assoc()) {
-                  array_push($songs, $data);
+              $songs = array();
+              while ($data = $result3->fetch_assoc()) {
+                array_push($songs, $data);
+              }
+
+              $i = 0;
+              foreach ($songs as $key => $s) :
+                if ($i > 9) {
+                  break;
                 }
 
-                $i = 0;
-                foreach ($songs as $key => $s) :
-                  if ($i > 9) {
-                    break;
-                  }
+                $i++;
+                $paths = $s["path"];
+              ?>
 
-                  $i++;
-                  $paths = $s["path"];
-                ?>
+
+                <ul id="listAudio" class="list-unstyled iq-music-slide mb-0">
+
+
                   <li class="mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                       <div class="media align-items-center col-10 col-md-5">
@@ -173,15 +176,19 @@ if ($result->num_rows > 0) {
                         </div>
                         <div class="media-body text-black ml-3">
                           <p class="mb-0 iq-music-title"><?php echo $s['name_audio']; ?></p>
-                          <small><?php echo $s['audio_cate']; ?></small>
+                          <small><?php echo $s['audio_cate'];
+                                  ?></small>
                         </div>
                       </div>
-                      <p class="mb-0 col-md-2 iq-m-time"><?php echo $s["time_audio"] ?> </p>
+                      <p class="mb-0 col-md-2 iq-m-time"><?php echo $s["time_audio"]
+                                                          ?> </p>
                       <p class="mb-0 col-md-2 iq-m-icon">
-                        <i class="lar la-star font-size-20"></i>
+                        <small>125 <i class="lar la-star font-size-20"></i></small>
                       </p>
                       <form action="" method="get">
-                        <a href="music-player.php?nameaudio=<?php echo $s['name_audio'] ?>&path=<?php echo $s['path'] ?>" style="cursor: pointer;" class="mb-0 col-2 col-md-2 cursor-pointer">
+                        <a href="music-player.php?nameaudio=<?php echo $s['name_audio']
+                                                            ?>&path=<?php echo $s['path']
+                                                                    ?>" style="cursor: pointer;" class="mb-0 col-2 col-md-2 cursor-pointer">
                           <i class="las la-play-circle font-size-32">
                           </i>
                         </a>
@@ -208,560 +215,11 @@ if ($result->num_rows > 0) {
 
                   </li>
 
-                <?php endforeach ?>
+                <?php endforeach
+                ?>
 
-                <!--
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title"><?php echo $s["audio_cate"] ?></p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                          
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                             
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                             
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                             
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                             
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <audio controls src="/media/cc0-audio/t-rex-roar.mp3">
-                            <audio controls src="../lang/AR-EN/family/AREM002.mp3" ></audio>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                             
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                     </li>
-                     <li class="mb-3">
-                        <div
-                          class="d-flex justify-content-between align-items-center"
-                        >
-                          <div class="media align-items-center col-10 col-md-5">
-                            <div class="iq-realese-song">
-                              <a href="music-player.php">
-                                <img
-                                  src="images/en.png"
-                                  class="img-border-radius avatar-60 img-fluid"
-                                  alt=""
-                                />
-                              </a>
-                            </div>
-                            <div class="media-body text-black ml-3">
-                              <p class="mb-0 iq-music-title">Audio 1</p>
-                              <small>Family</small>
-                            </div>
-                          </div>
-                          <p class="mb-0 col-md-2 iq-m-time">9:52</p>
-                          <p class="mb-0 col-md-2 iq-m-icon">
-                            <i class="lar la-star font-size-20"></i>
-                          </p>
-                          <p class="mb-0 col-2 col-md-2">
-                            <i class="las la-play-circle font-size-32"></i>
-                          </p>
-                          <div
-                            class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1"
-                          >
-                             
-                            <div class="dropdown">
-                              <span
-                                class="dropdown-toggle text-primary"
-                                id="dropdownMenuButton1"
-                                data-toggle="dropdown"
-                                aria-expanded="false"
-                                role="button"
-                              >
-                                <i class="ri-more-2-fill text-primary"></i>
-                              </span>
-                              <div
-                                class="dropdown-menu dropdown-menu-right"
-                                aria-labelledby="dropdownMenuButton1"
-                                style=""
-                              >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-eye-fill mr-2"></i>View</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-delete-bin-6-fill mr-2"></i
-                                  >Delete</a
-                                >
-                                <a class="dropdown-item" href="#"
-                                  ><i class="ri-file-download-fill mr-2"></i
-                                  >Download</a
-                                >
-                              </div>
-                              
-                            </div>
-                          </div>
-                        </div>
-                     </li>-->
-              </ul>
+
+                </ul>
             </div>
           </div>
         </div>
@@ -776,11 +234,64 @@ if ($result->num_rows > 0) {
     <?php require('./assets/footer.php') ?>
   </footer>
 
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <!-- Appear JavaScript -->
+  <script src="js/jquery.appear.js"></script>
+  <!-- Countdown JavaScript -->
+  <script src="js/countdown.min.js"></script>
+  <!-- Counterup JavaScript -->
+  <script src="js/waypoints.min.js"></script>
+  <script src="js/jquery.counterup.min.js"></script>
+  <!-- Wow JavaScript -->
+  <script src="js/wow.min.js"></script>
+  <!-- Apexcharts JavaScript -->
+  <script src="js/apexcharts.js"></script>
+  <!-- Slick JavaScript -->
+  <script src="js/slick.min.js"></script>
+  <!-- Select2 JavaScript -->
+  <script src="js/select2.min.js"></script>
+  <!-- Owl Carousel JavaScript -->
+  <script src="js/owl.carousel.min.js"></script>
+  <!-- Magnific Popup JavaScript -->
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <!-- Smooth Scrollbar JavaScript -->
+  <script src="js/smooth-scrollbar.js"></script>
+  <!-- lottie JavaScript -->
+  <script src="js/lottie.js"></script>
+  <!-- am core JavaScript -->
+  <script src="js/core.js"></script>
+  <!-- am charts JavaScript -->
+  <script src="js/charts.js"></script>
+  <!-- am animated JavaScript -->
+  <script src="js/animated.js"></script>
+  <!-- am kelly JavaScript -->
+  <script src="js/kelly.js"></script>
+  <!-- am maps JavaScript -->
+  <script src="js/maps.js"></script>
+  <!-- am worldLow JavaScript -->
+  <script src="js/worldLow.js"></script>
+  <!-- Raphael-min JavaScript -->
+  <script src="js/raphael-min.js"></script>
+  <!-- Morris JavaScript -->
+  <script src="js/morris.js"></script>
+  <!-- Morris min JavaScript -->
+  <script src="js/morris.min.js"></script>
+  <!-- Flatpicker Js -->
+  <script src="js/flatpickr.js"></script>
+  <!-- Style Customizer -->
+  <script src="js/style-customizer.js"></script>
+  <!-- Chart Custom JavaScript -->
+  <script src="js/chart-custom.js"></script>
+  <!-- Music js -->
+  <script src="js/music-player.js"></script>
+  <!-- Music-player js -->
+  <script src="js/music-player-dashboard.js"></script>
+  <!-- Custom JavaScript -->
+  <script src="js/custom.js"></script>
 
-
-  <!-- Footer END -->
 </body>
 
-<!-- Mirrored from templates.iqonic.design/LANG/html/music-player.php by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 21 May 2022 09:43:22 GMT -->
 
 </html>

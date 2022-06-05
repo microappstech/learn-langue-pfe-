@@ -1,13 +1,18 @@
 <?php
 session_start();
 
-if (!$_SESSION["username"]=="") {
+if ($_SESSION["username"] == "") {
   header("location:sign-in.php");
 }
+$conn = new mysqli("localhost", "root", "", "learn_lang");
+$username = $_SESSION["username"];
+$sqluser = "SELECT * from users where username = '$username'";
+$res = $conn->query($sqluser);
+$user = $res->fetch_assoc();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<!-- Mirrored from templates.iqonic.design/LANG/html/profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 21 May 2022 09:44:37 GMT -->
 
 <head>
   <!-- Required meta tags -->
@@ -35,7 +40,8 @@ if (!$_SESSION["username"]=="") {
   <!-- Wrapper Start -->
   <div class="wrapper">
     <!-- Sidebar  -->
-    <?php include './assets/nav.html' ?>
+    <?php //include './assets/nav.php' 
+    ?>
 
     <!-- TOP Nav Bar END -->
     <!-- Page Content  -->
@@ -48,15 +54,11 @@ if (!$_SESSION["username"]=="") {
               <div class="iq-card-body profile-page">
                 <div class="profile-header">
                   <div class="cover-container text-center">
-                    <img src="images/user/1.jpg" alt="profile-bg" class="rounded-circle img-fluid" />
+                    <img src="<?php echo $user["picture"] ?>" alt="profile-bg" class=" w-25 h-25 rounded-circle img-fluid" />
                     <div class="profile-detail mt-3">
-                      <h3>Barry Tech</h3>
-                      <p class="text-primary">Web designer</p>
-                      <p>
-                        Phasellus faucibus mollis pharetra. Proin blandit ac
-                        massa.Morbi nulla dolor, ornare at commodo non,
-                        feugiat non nisi.
-                      </p>
+                      <h3><?php echo $user["fullname"] ?></h3>
+                      <p class="text-primary"><?php echo "@" . $user["username"] ?></p>
+
                     </div>
                     <div class="iq-social d-inline-block align-items-center">
                       <ul class="list-inline d-flex p-0 mb-0 align-items-center">
@@ -177,7 +179,7 @@ if (!$_SESSION["username"]=="") {
               </div>
             </div>
           </div>
-          <div class="col-12 col-md-12 col-lg-8">
+          <div class="col-12 col-md-12 col-lg-8 d-none">
             <div class="row">
               <div class="col-md-6">
                 <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
@@ -292,7 +294,7 @@ if (!$_SESSION["username"]=="") {
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6 d-none">
                 <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
                   <div class="iq-card-header d-flex justify-content-between align-items-center mb-0">
                     <div class="iq-header-title">
@@ -432,7 +434,7 @@ if (!$_SESSION["username"]=="") {
                 </ul>
               </div>
             </div>
-            <div class="iq-card">
+            <div class="iq-card d-none">
               <div class="iq-card-header d-flex justify-content-between align-items-center mb-0">
                 <div class="iq-header-title">
                   <h4 class="card-title mb-0">Top Products</h4>
@@ -496,11 +498,65 @@ if (!$_SESSION["username"]=="") {
   </div>
   <!-- Wrapper END -->
 
+  <script src="js/jquery.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <!-- Appear JavaScript -->
+  <script src="js/jquery.appear.js"></script>
+  <!-- Countdown JavaScript -->
+  <script src="js/countdown.min.js"></script>
+  <!-- Counterup JavaScript -->
+  <script src="js/waypoints.min.js"></script>
+  <script src="js/jquery.counterup.min.js"></script>
+  <!-- Wow JavaScript -->
+  <script src="js/wow.min.js"></script>
+  <!-- Apexcharts JavaScript -->
+  <script src="js/apexcharts.js"></script>
+  <!-- Slick JavaScript -->
+  <script src="js/slick.min.js"></script>
+  <!-- Select2 JavaScript -->
+  <script src="js/select2.min.js"></script>
+  <!-- Owl Carousel JavaScript -->
+  <script src="js/owl.carousel.min.js"></script>
+  <!-- Magnific Popup JavaScript -->
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <!-- Smooth Scrollbar JavaScript -->
+  <script src="js/smooth-scrollbar.js"></script>
+  <!-- lottie JavaScript -->
+  <script src="js/lottie.js"></script>
+  <!-- am core JavaScript -->
+  <script src="js/core.js"></script>
+  <!-- am charts JavaScript -->
+  <script src="js/charts.js"></script>
+  <!-- am animated JavaScript -->
+  <script src="js/animated.js"></script>
+  <!-- am kelly JavaScript -->
+  <script src="js/kelly.js"></script>
+  <!-- am maps JavaScript -->
+  <script src="js/maps.js"></script>
+  <!-- am worldLow JavaScript -->
+  <script src="js/worldLow.js"></script>
+  <!-- Raphael-min JavaScript -->
+  <script src="js/raphael-min.js"></script>
+  <!-- Morris JavaScript -->
+  <script src="js/morris.js"></script>
+  <!-- Morris min JavaScript -->
+  <script src="js/morris.min.js"></script>
+  <!-- Flatpicker Js -->
+  <script src="js/flatpickr.js"></script>
+  <!-- Style Customizer -->
+  <script src="js/style-customizer.js"></script>
+  <!-- Chart Custom JavaScript -->
+  <script src="js/chart-custom.js"></script>
+  <!-- Music js -->
+  <script src="js/music-player.js"></script>
+  <!-- Music-player js -->
+  <script src="js/music-player-dashboard.js"></script>
+  <!-- Custom JavaScript -->
+  <script src="js/custom.js"></script>
   <!-- Footer -->
-  <?php include './assets/ footer.php' ?>
   <!-- Footer END -->
 </body>
 
-<!-- Mirrored from templates.iqonic.design/LANG/html/profile.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 21 May 2022 09:44:38 GMT -->
 
 </html>

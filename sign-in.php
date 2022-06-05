@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Mirrored from templates.iqonic.design/LANG/html/sign-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 21 May 2022 09:44:47 GMT -->
 
 <head>
     <!-- Required meta tags -->
@@ -20,12 +19,10 @@
 </head>
 
 <body>
-    <!-- loader Start -->
     <div id="loading">
         <div id="loading-center"></div>
     </div>
-    <!-- loader END -->
-    <!-- Sign in Start -->
+
     <section class="sign-in-page">
         <div class="container">
             <div class="row justify-content-center align-items-center height-self-center">
@@ -53,6 +50,7 @@
                                             Sign in
                                         </button>
                                         <?php
+                                        session_start();
                                         if (isset($_POST["login"])) {
                                             $username = $_POST['username'];
                                             $password = $_POST['password'];
@@ -60,36 +58,15 @@
                                             $conn = new mysqli("localhost", "root", "", "learn_lang");
                                             $query = "SELECT password_user from users where username like '$username' and password_user like '$password';";
                                             $result = $conn->query($query);
-                                            if($result->num_rows == 0){
+                                            if ($result->num_rows == 0) {
                                                 echo "<p style='color:red;'>username or password incorrect</p>";
-                                            }
-                                            else
-                                            {
-                                                header("Location:inde.php");
+                                            } else {
+                                                header("Location:music-player.php");
                                                 echo "<p style='color:green'>Login Seccussfull </p>";
                                                 $_SESSION["username"] = $username;
-                                                echo $_SESSION["username"];
-
                                             }
-                                            }
-                                            // print_r(mysql_fetch_array($result));
-                                            // $res = $conn->query($query);
-                                            // print_r($res);
-                                            // if ($res->num_rows == 0) {
-                                            //     if(password_verify()){
-                                                    
-                                            //     }else{
-                                            //         echo "are not ";
-                                            //     }
+                                        }
 
-                                            //     echo "<p style='color:red;'>password or username is incorrect !!!!</p>";
-                                            //     echo "<p style='color:red;'>$password</p>";
-                                            // } else {
-                                            //     echo "<p style='color:green'>Login Seccussfull </p>";
-                                            //     $_SESSION["username"] = $username;
-                                            //     header("Location:inde.php");
-                                            // }
-                                        
                                         ?>
 
                                         <span class="dark-color d-block line-height-2">Don't have an account?

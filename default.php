@@ -1,7 +1,13 @@
+<?php
+session_start();
+unset($_SESSION["language"]);
+session_destroy();
+print_r($_SESSION);
+//echo "<script>alert(\"la variable est nulle\")</script>";
+
+?>
 <!doctype html>
 <html lang="en">
-
-<!-- Mirrored from templates.iqonic.design/muzik/intro/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 20 May 2022 09:17:15 GMT -->
 
 <head>
    <!-- Required meta tags -->
@@ -42,7 +48,6 @@
 </head>
 
 <body>
-   <!-- loader Start -->
    <div id="loading">
       <div id="loading-center">
          <div class="loader">
@@ -56,9 +61,10 @@
          <div class="row align-items-center">
             <div class="col-lg-8">
                <nav class="navbar navbar-expand-lg navbar-light">
-                  <a class="navbar-brand" href="index.php">
-                     <img class="logo" src="assetintro/images/logo-full.png" alt="image">
-                     <img class="logo-two" src="assetintro/images/logo-two.png" alt="image">
+                  <a class="navbar-brand d-flex" href="index.php">
+                     <img class="logo" src="images/logo.png" alt="image">
+                     <img class="logo-two" src="images/logo.png" alt="image">
+                     <h4 style="color: white; margin-top:6px; margin-left:2px;">LANG</h4>
                   </a>
                   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                      <span class="navbar-toggler-icon"></span>
@@ -93,11 +99,13 @@
             <canvas id="canvas"></canvas>
          </div>
          <div class="slider-content">
-            <div class="slider-logo wow fadeInUp" data-wow-duration="0.6s">
-               <img class="logo img-fluid" src="assetintro/images/logo-full.png" alt="image">
+            <div class="slider-logo wow fadeInUp d-flex" data-wow-duration="0.6s">
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <img class="logo img-fluid w-25" src="images/logo.png" alt="image">
+               <h1 style="color:white ;margin-left:10px;">LANG</h1>
             </div>
             <div class="text-center slider-text m-3 wow fadeInUp" data-wow-duration="0.8s">
-               <p class="mb-0">Muzik - Music Streaming <br> Admin Template</p>
+               <p class="mb-0"> Learn Langue from<br> Streaming </p>
             </div>
          </div>
       </div>
@@ -126,7 +134,5 @@
       <script async src="https://socialproof.zaperp.com/pixel/4PUCCDUMZU814VI4L1L4P2V5XP9K4MPU"></script>
 
 </body>
-
-<!-- Mirrored from templates.iqonic.design/muzik/intro/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 20 May 2022 09:17:32 GMT -->
 
 </html>
