@@ -14,14 +14,10 @@ if (isset($_POST["submit"])) {
   $picture = $sptarget;
   $check = getimagesize($_FILES["picture"]["tmp_name"]);
   if ($check !== false) {
-    if (file_exists($sptarget)) {
-      echo "<p style='color:red'>Sorry, file already exists.</p>";
+    if (move_uploaded_file($_FILES["picture"]["tmp_name"], $sptarget)) {
+      $uploadOk = true;
     } else {
-      if (move_uploaded_file($_FILES["picture"]["tmp_name"], $sptarget)) {
-        $uploadOk = true;
-      } else {
-        $uploadOk = false;
-      }
+      $uploadOk = false;
     }
   }
   if ($uploadOk == false) {
@@ -120,11 +116,13 @@ if (isset($_POST["submit"])) {
 
                           <label>lannguage :</label>
                           <select name="language" class="form-control" required id="selectuserrole">
-                            <option value="en ar">english - arabic</option>
-                            <option value="ar en">arabic - english</option>
-                            <option value="ar es">arabic - spanish</option>
-                            <option value="en fr">english - francais</option>
-                            <option value="en es">english - spanish</option>
+                            <option value="en ar">english - arabic </option>
+                            <option value="ar en">arabic - english </option>
+                            <option value="ar es">arabic - spanish </option>
+                            <option value="en fr">english - francais </option>
+                            <option value="en es">english - spanish </option>
+                            <option value="ar de">arabic german </option>
+                            <option value="ar fr">arabic - french </option>
 
                           </select>
                         </div>

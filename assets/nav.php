@@ -45,17 +45,9 @@ $user = $res->fetch_assoc();
                 <a href="admin-dashboard.php"><i class="las la-house-damage"></i>Dashboard</a>
               </li>
               <li>
-                <a href="admin-category.php"><i class="ri-function-line"></i>Category</a>
+                <a href="addAudio.php"><i class="ri-function-line"></i>Add Audio</a>
               </li>
-              <li>
-                <a href="admin-writer.php"><i class="las la-user"></i>Writer</a>
-              </li>
-              <li>
-                <a href="admin-singer.php"><i class="las la-microphone-alt"></i>Singer</a>
-              </li>
-              <li>
-                <a href="admin-song.php"><i class="las la-play-circle"></i>Music</a>
-              </li>
+              
             </ul>
         </li> ';
         }
