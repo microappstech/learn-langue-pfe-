@@ -6,10 +6,13 @@ if ($_SESSION["username"] == "") {
 }
 $conn = new mysqli("localhost", "root", "", "learn_lang");
 $username = $_SESSION["username"];
-$sqluser = "SELECT * from users where username = '$username'";
+$sqluser = "SELECT * from langue,users where users.language_user=langue.name_lang and  users.username = '$username'";
+$sqllangue = "SELECT * FROM langue , users where users.language_user=langue.name_lang and  users.username = '$username'";
+$res2 = $conn->query($sqllangue);
 $res = $conn->query($sqluser);
-$user = $res->fetch_assoc();
 
+$user = $res->fetch_array();
+$langue = $res2->fetch_array();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +43,7 @@ $user = $res->fetch_assoc();
   <!-- Wrapper Start -->
   <div class="wrapper">
     <!-- Sidebar  -->
-    <?php //include './assets/nav.php' 
+    <?php include './assets/nav2.php'
     ?>
 
     <!-- TOP Nav Bar END -->
@@ -49,30 +52,27 @@ $user = $res->fetch_assoc();
       <div class="container-fluid">
 
         <div class="row profile-content">
-          <div class="col-12 col-md-12 col-lg-4">
+          <div class="col">
             <div class="iq-card">
               <div class="iq-card-body profile-page">
                 <div class="profile-header">
                   <div class="cover-container text-center">
-                    <img src="<?php echo $user["picture"] ?>" alt="profile-bg" class=" w-25 h-25 rounded-circle img-fluid" />
+                    <img src="<?php echo $langue["picture"] ?>" alt="profile-bg" class=" w-25 h-25 rounded-circle img-fluid" />
                     <div class="profile-detail mt-3">
                       <h3><?php echo $user["fullname"] ?></h3>
-                      <p class="text-primary"><?php echo "@" . $user["username"] ?></p>
+                      <p class="text-primary"><?php echo "@" . $langue["username"] ?></p>
 
                     </div>
                     <div class="iq-social d-inline-block align-items-center">
                       <ul class="list-inline d-flex p-0 mb-0 align-items-center">
                         <li>
-                          <a href="#" class="avatar-40 rounded-circle bg-primary mr-2 facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                          <a href="<?php echo $langue["facebook"] ?>" class="avatar-40 rounded-circle bg-primary mr-2 facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                         </li>
                         <li>
-                          <a href="#" class="avatar-40 rounded-circle bg-primary mr-2 twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                          <a href="<?php echo $langue["twitter"] ?>" class="avatar-40 rounded-circle bg-primary mr-2 twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a>
                         </li>
                         <li>
-                          <a href="#" class="avatar-40 rounded-circle bg-primary mr-2 youtube"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                          <a href="#" class="avatar-40 rounded-circle bg-primary pinterest"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
+                          <a href="<?php echo $langue["youtube"] ?>" class="avatar-40 rounded-circle bg-primary mr-2 youtube"><i class="fa fa-youtube-play" aria-hidden="true"></i></a>
                         </li>
                       </ul>
                     </div>
@@ -90,38 +90,26 @@ $user = $res->fetch_assoc();
                 <ul class="list-inline p-0 mb-0">
                   <li>
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                      <h6>Birthday</h6>
-                      <p class="mb-0">3rd March</p>
+                      <h6>Full Name</h6>
+                      <p class="mb-0"><?php echo $user["fullname"] ?></p>
                     </div>
                   </li>
                   <li>
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                      <h6>Address</h6>
-                      <p class="mb-0">Landon</p>
+                      <h6>Your Langue</h6>
+                      <p class="mb-0"><?php echo $langue["name_complet"]; ?></p>
                     </div>
                   </li>
                   <li>
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                      <h6>Phone</h6>
-                      <p class="mb-0">(010)987 543 201</p>
+                      <h6>Learning </h6>
+                      <p class="mb-0"><?php echo $langue["des"]; ?></p>
                     </div>
                   </li>
                   <li>
                     <div class="d-flex align-items-center justify-content-between mb-3">
-                      <h6>Email</h6>
-                      <p class="mb-0">Barry@example.com</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                      <h6>Twitter</h6>
-                      <p class="mb-0">@Barry</p>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                      <h6>Twitter</h6>
-                      <p class="mb-0">@Barry_Tech</p>
+                      <h6>Age </h6>
+                      <p class="mb-0"><?php echo $langue["age"]; ?></p>
                     </div>
                   </li>
                 </ul>

@@ -1,35 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Mirrored from templates.iqonic.design/LANG/html/admin-add-song.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 21 May 2022 09:45:21 GMT -->
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>LANG - Add Audio</title>
-    <!-- Favicon -->
     <link rel="shortcut icon" href="images/favicon.ico" />
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/dataTables.bootstrap4.min.css" />
-    <!-- Typography CSS -->
     <link rel="stylesheet" href="css/typography.css" />
-    <!-- Style CSS -->
     <link rel="stylesheet" href="css/style.css" />
-    <!-- Responsive CSS -->
     <link rel="stylesheet" href="css/responsive.css" />
 </head>
 
 <body>
-    <!-- loader Start -->
     <div id="loading">
         <div id="loading-center"></div>
     </div>
-    <!-- Wrapper Start -->
     <div class="wrapper">
-        <!-- TOP Nav Bar -->
         <?php include './assets/nav2.php' ?>
-        <!-- Page Content  -->
         <div id="content-page" class="content-page">
             <div class="container-fluid">
                 <div class="row">
@@ -46,7 +35,6 @@
                                         <label>Audio :</label>
                                         <div class="custom-file">
                                             <input accept=".mp3, .mp4" type="file" name="file1" required placeholder="Last Name" />
-                                            <!-- <label class="custom-file-label" for="customFile">Choose file</label> -->
                                         </div>
                                     </div>
                                     <div class="form-group">

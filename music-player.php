@@ -18,10 +18,8 @@ if (isset($_SESSION['nameaudio'])) {
 } else {
   $nameaudio = "ARES001.mp3";
 }
-
 $result2 = $conn->query($querylangue);
 $lang = $result2->fetch_assoc();
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -42,6 +40,11 @@ $lang = $result2->fetch_assoc();
   <link rel="stylesheet" href="css/style.css">
   <!-- Responsive CSS -->
   <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .redd {
+      color: red;
+    }
+  </style>
 </head>
 
 <body>
@@ -53,12 +56,8 @@ $lang = $result2->fetch_assoc();
   <!-- loader END -->
   <!-- Wrapper Start -->
   <div class="wrapper">
-    <!-- Sidebar  -->
-
     <?php include './assets/nav.php' ?>
-    <!-- TOP Nav Bar END -->
 
-    <!-- Page Content  -->
     <div id="content-page" class="content-page">
       <div class="container-fluid">
         <div class="row">
@@ -69,7 +68,7 @@ $lang = $result2->fetch_assoc();
                   <div class="col-lg-4">
                     <form method="POST" class="form-group">
                       <label>Category :</label>
-                      <select name="category" class="form-control" id="selectuserrole">
+                      <select name="category" class="form-control" onchange="" id="selectuserrole">
                         <?php
                         $sqloption = "SELECT DISTINCT(audio_cate) from audio;";
                         $rescate = $conn->query($sqloption);
@@ -84,49 +83,37 @@ $lang = $result2->fetch_assoc();
                             break;
                           }
                           $i++;
-
-
-
-
-
                         ?>
                           <option value='<?php echo $cate["audio_cate"] ?>'><?php echo $cate["audio_cate"] ?></option>
                         <?php endforeach ?>
-
                       </select>
-                      <button name="submit" type="submit">Filter</button>
-                      <?php
+                      <button class="btn btn-primary iq-play mr-2 desabled mt-3 ml5-" name="submit" type="submit">Filter</button>
+
+                      <?php /*
                       if (isset($_POST['submit'])) {
                         $selected = $_POST['category'];
                         $_SESSION['category'] = $selected;
                         $category = $selected;
                         echo 'You have chosen: ' . $selected;
-                      }
-
-
-
-                      ?>
+                      } */ ?>
                     </form>
-
                   </div>
                   <div class="col-lg-8">
                     <div class="d-flex align-items-top justify-content-between iq-music-play-detail">
                       <div class="music-detail">
-                        <h3><?php echo $lang["name_complet"];
-
-                            ?></h3>
+                        <h3><?php echo $lang["name_complet"]; ?></h3>
                         <span><?php echo $lang["des"] ?></span>
 
                         <div class="d-flex align-items-center">
-                          <a href="javascript:void(0);" class="btn btn-primary iq-play mr-2 desabled">Play</a>
+                          <button href="javascript:void(0);" onclick="playAudio()" class="btn btn-primary iq-play mr-2 desabled">Play</button>
                         </div>
                       </div>
                       <div class="music-right">
                         <div class="d-flex align-items-center">
-                          <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div>
-                          <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div>
+                          <!-- <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div> -->
+                          <!-- <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div> -->
                           <div class="iq-circle">
-                            <a href="javascript:void();"><i class="las la-download text-primary"></i></a>
+                            <a href="./lang/AR-DE/at_school/ARDE-all_4.zip" download><i class="las la-download text-primary"></i></a>
                           </div>
                         </div>
                       </div>
@@ -154,18 +141,13 @@ $lang = $result2->fetch_assoc();
 
               $i = 0;
               foreach ($songs as $key => $s) :
-                if ($i > 9) {
+                if ($i > 98) {
                   break;
                 }
-
                 $i++;
                 $paths = $s["path"];
               ?>
-
-
                 <ul id="listAudio" class="list-unstyled iq-music-slide mb-0">
-
-
                   <li class="mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                       <div class="media align-items-center col-10 col-md-5">
@@ -176,28 +158,23 @@ $lang = $result2->fetch_assoc();
                         </div>
                         <div class="media-body text-black ml-3">
                           <p class="mb-0 iq-music-title"><?php echo $s['name_audio']; ?></p>
-                          <small><?php echo $s['audio_cate'];
-                                  ?></small>
+                          <small><?php echo $s['audio_cate']; ?></small>
                         </div>
                       </div>
-                      <p class="mb-0 col-md-2 iq-m-time"><?php echo $s["time_audio"]
-                                                          ?> </p>
+                      <p class="mb-0 col-md-2 iq-m-time"><?php echo $s["time_audio"] ?> </p>
                       <p class="mb-0 col-md-2 iq-m-icon">
-                        <small>125 <i class="lar la-star font-size-20"></i></small>
+                        <a name="heart" type="submit">
+                          <?php echo $s["like_audio"];
+                          $likes = $s["like_audio"]
+                          ?><i id="heart" class="fa fa-heart font-size-20" onclick="star(this)" style="cursor: pointer;"></i>
+                        </a>
                       </p>
                       <form action="" method="get">
-                        <a href="music-player.php?nameaudio=<?php echo $s['name_audio']
-                                                            ?>&path=<?php echo $s['path']
-                                                                    ?>" style="cursor: pointer;" class="mb-0 col-2 col-md-2 cursor-pointer">
+                        <a href="music-player.php?nameaudio=<?php echo $s['name_audio'] ?>&path=<?php echo $s['path'] ?>" style="cursor: pointer;" class="mb-0 col-2 col-md-2 cursor-pointer">
                           <i class="las la-play-circle font-size-32">
                           </i>
                         </a>
                       </form>
-                      <?php
-
-
-                      ?>
-
                       <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1">
 
                         <div class="dropdown">
@@ -233,7 +210,13 @@ $lang = $result2->fetch_assoc();
   <footer style="position:relative ;">
     <?php require('./assets/footer.php') ?>
   </footer>
+  <script>
+    function star(el) {
+      el.classList.toggle('redd')
 
+
+    }
+  </script>
   <script src="js/jquery.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>

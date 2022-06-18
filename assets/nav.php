@@ -55,7 +55,9 @@ $user = $res->fetch_assoc();
         <li>
           <a href="calendar.php" class="iq-waves-effect"><i class="las la-calendar iq-arrow-left"></i><span>Calendar</span></a>
         </li>
-
+        <li>
+          <a href="http://127.0.0.1/server/project/contact/contact.php" class="iq-waves-effect"><i class="las la-calendar iq-arrow-left"></i><span>Contact</span></a>
+        </li>
       </ul>
     </nav>
   </div>
@@ -89,13 +91,13 @@ $user = $res->fetch_assoc();
         </ul>
         <ul class="navbar-nav ml-auto navbar-list">
           <li class="nav-item nav-icon">
-            <div class="iq-search-bar">
+            <!-- <div class="iq-search-bar">
               <form action="#" class="searchbox">
                 <input type="text" class="text search-input" placeholder="Search Here.." />
                 <a class="search-link" href="#"><i class="ri-search-line text-black"></i></a>
                 <a class="search-audio" href="#"><i class="las la-microphone text-black"></i></a>
               </form>
-            </div>
+            </div> -->
           </li>
           <li class="nav-item nav-icon search-content">
             <a href="#" class="search-toggle iq-waves-effect text-gray rounded"><span class="ripple rippleEffect"></span>
@@ -185,7 +187,7 @@ $user = $res->fetch_assoc();
               </div>
             </div>
           </li>
-          <li class="nav-item nav-icon">
+          <!-- <li class="nav-item nav-icon">
             <a href="#" class="search-toggle iq-waves-effect text-black rounded">
               <i class="ri-notification-line block"></i>
               <span class="notice-icon dots badge badge-primary">+</span>
@@ -249,7 +251,7 @@ $user = $res->fetch_assoc();
                 </div>
               </div>
             </div>
-          </li>
+          </li> -->
           <li class="line-height pt-3">
             <a href="#" class="search-toggle iq-waves-effect d-flex align-items-center">
               <img src="<?php echo $user['picture'] ?>" class="img-fluid rounded-circle" alt="user" />
