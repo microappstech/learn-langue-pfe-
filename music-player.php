@@ -89,13 +89,12 @@ $lang = $result2->fetch_assoc();
                       </select>
                       <button class="btn btn-primary iq-play mr-2 desabled mt-3 ml5-" name="submit" type="submit">Filter</button>
 
-                      <?php /*
+                      <?php
                       if (isset($_POST['submit'])) {
                         $selected = $_POST['category'];
                         $_SESSION['category'] = $selected;
                         $category = $selected;
-                        echo 'You have chosen: ' . $selected;
-                      } */ ?>
+                      }  ?>
                     </form>
                   </div>
                   <div class="col-lg-8">
@@ -105,13 +104,11 @@ $lang = $result2->fetch_assoc();
                         <span><?php echo $lang["des"] ?></span>
 
                         <div class="d-flex align-items-center">
-                          <button href="javascript:void(0);" onclick="playAudio()" class="btn btn-primary iq-play mr-2 desabled">Play</button>
+                          <button href="javascript:void(0);" id="btnplay" onclick="playAudio()" class="btn btn-primary iq-play mr-2 desabled">Play</button>
                         </div>
                       </div>
                       <div class="music-right">
                         <div class="d-flex align-items-center">
-                          <!-- <div class="iq-circle mr-2 share"><a href="javascript:void();"><i class="las la-share-alt-square text-primary"></i></a></div> -->
-                          <!-- <div class="iq-circle mr-2"><a href="javascript:void();"><i class="ri-heart-fill  text-primary"></i></a></div> -->
                           <div class="iq-circle">
                             <a href="./lang/AR-DE/at_school/ARDE-all_4.zip" download><i class="las la-download text-primary"></i></a>
                           </div>
@@ -132,22 +129,24 @@ $lang = $result2->fetch_assoc();
               //$sql = "SELECT * FROM `audio` Where audio_cate like '$category' and ;";
               $sql = "SELECT * FROM `audio` Where audio_cate like '$category' and `audio_lang`='$language';";
               $result3 = $conn->query($sql);
-
-
               $songs = array();
               while ($data = $result3->fetch_assoc()) {
                 array_push($songs, $data);
               }
 
-              $i = 0;
-              foreach ($songs as $key => $s) :
-                if ($i > 98) {
-                  break;
-                }
-                $i++;
-                $paths = $s["path"];
               ?>
-                <ul id="listAudio" class="list-unstyled iq-music-slide mb-0">
+
+              <ul id="listAudio" class="list-unstyled iq-music-slide mb-0">
+                <?php
+
+                $i = 0;
+                foreach ($songs as $key => $s) :
+                  if ($i > 98) {
+                    break;
+                  }
+                  $i++;
+                  $paths = $s["path"];
+                ?>
                   <li class="mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                       <div class="media align-items-center col-10 col-md-5">
@@ -175,28 +174,15 @@ $lang = $result2->fetch_assoc();
                           </i>
                         </a>
                       </form>
-                      <div class="iq-card-header-toolbar iq-music-drop d-flex align-items-center col-md-1">
-
-                        <div class="dropdown">
-                          <span class="dropdown-toggle text-primary" id="dropdownMenuButton1" data-toggle="dropdown" aria-expanded="false" role="button">
-                            <i class="ri-more-2-fill text-primary"></i>
-                          </span>
-                          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton1" style="">
-                            <a class="dropdown-item" href="#"><i class="ri-eye-fill mr-2"></i>View</a>
-                            <a class="dropdown-item" href="#"><i class="ri-delete-bin-6-fill mr-2"></i>Delete</a>
-                            <a class="dropdown-item" href="#"><i class="ri-file-download-fill mr-2"></i>Download</a>
-                          </div>
-                        </div>
-                      </div>
                     </div>
 
                   </li>
 
-                <?php endforeach
-                ?>
+
+                <?php endforeach ?>
 
 
-                </ul>
+              </ul>
             </div>
           </div>
         </div>

@@ -39,11 +39,9 @@ $langue = $res2->fetch_array();
   <div id="loading">
     <div id="loading-center"></div>
   </div>
-  <!-- loader END -->
-  <!-- Wrapper Start -->
   <div class="wrapper">
-    <!-- Sidebar  -->
-    <?php include './assets/nav2.php'
+
+    <?php include './assets/nav.php'
     ?>
 
     <!-- TOP Nav Bar END -->

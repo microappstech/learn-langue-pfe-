@@ -17,10 +17,61 @@
 </head>
 
 <body>
+	<?php
+
+	use PHPMailer\PHPMailer\PHPMailer;
+	use PHPMailer\PHPMailer\SMTP;
+	use PHPMailer\PHPMailer\Exception;
+
+	require "../vendor/autoload.php";
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		$name = $_POST["name"];
+		$message = $_POST["message"];
+		$email = $_POST["email"];
+		// 
+		$forms_erreur = array();
+		if (strlen($name) <= 3) {
+			$forms_erreur[] = "please write correct name !";
+		}
+		if (strlen($message) < 8) {
+			$forms_erreur[] = "Please write correct message !";
+		}
+		$headers =  'MIME-Version: 1.0' . "\r\n";
+		$headers .= "From: $email" . "\r\n";
+		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+		if (empty($forms_erreur)) {
+			$mail = new PHPMailer();
+
+			//$mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+			$mail->isSMTP();                                            //Send using SMTP
+			$mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+			$mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+			$mail->Username   = 'howhave157@gmail.com';                     //SMTP username
+			$mail->Password   = 'exprspjdlpsduede';                               //SMTP password
+			$mail->SMTPSecure = "tsl";            //Enable implicit TLS encryption
+			$mail->Port       = 587;
+
+			$mail->isHTML(true);
+			$mail->CharSet = "UTF-8";
+			//Recipients
+			$mail->setFrom($email, 'Get Help');   //Add a recipient
+			$mail->addAddress($email);
+			$mail->Subject = "get help";
+			$mail->Body = $message;
+			$res = "";
+			if ($mail->send()) {
+				$res = "<p style='background-color:#cef5d6; margin:20px 0;padding:20px ;border:1px solid #027a1a; text-align:center; '>The message has been sent </p>";
+			} else {
+				$res = "<p style='background-color:#f3c2c2; margin:20px 0;padding:20px ;border:1px solid #f40505; text-align:center;'>Somthing wrong</p>";
+			}
+		}
+	}
+	?>
 	<div class="bg-contact2" style="background-image: url('images/bg-01.jpg');">
 		<div class="container-contact2">
 			<div class="wrap-contact2">
-				<form class="contact2-form validate-form">
+				<form method="POST" action="<?php echo $_SERVER["PHP_SELF"] ?>" class="contact2-form validate-form">
 					<span class="contact2-form-title">
 						Contact Us
 					</span>
@@ -28,7 +79,7 @@
 						<input class="input2" type="text" name="name">
 						<span class="focus-input2" data-placeholder="NAME"></span>
 					</div>
-					<div class="wrap-input2 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+					<div class="wrap-input2 validate-input">
 						<input class="input2" type="text" name="email">
 						<span class="focus-input2" data-placeholder="EMAIL"></span>
 					</div>
@@ -39,11 +90,25 @@
 					<div class="container-contact2-form-btn">
 						<div class="wrap-contact2-form-btn">
 							<div class="contact2-form-bgbtn"></div>
-							<button class="contact2-form-btn">
+							<button name="send" type="submit" class="contact2-form-btn">
 								Send Your Message
 							</button>
 						</div>
+						<div>
+							<?php
+							if (isset($forms_erreur)) {
+
+								foreach ($forms_erreur as $err) {
+									echo "<p style='color: red; text-align:center;'> * $err </p>";
+								}
+							}
+							?>
+						</div>
 					</div>
+					<?php
+					if (isset($res)) {
+						echo $res;
+					} ?>
 				</form>
 			</div>
 		</div>
